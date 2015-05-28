@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>DB-Projekt</title>
+    <meta content="">
+    <style></style>
+  </head>
+  <body>
+  	<div style="text-align: center;"><h1>Hospitalmanager</h1></div>
+	<div>
+		<input type="button" value="New" onclick="document.location='new.php';">
+		<input type="button" value="Search">
+	</div>
+  </body>
+</html>
