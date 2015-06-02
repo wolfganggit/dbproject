@@ -15,7 +15,7 @@
 
 <?php
     
-    $stichwort = mysql_real_ escape_string( $_GET['keyword']);
+    $stichwort = mysql_real_escape_string( $_GET['keyword']);
     
     MySQL_connect("hostname", "username", "password");
     MySQL_select_db("database", $db);
