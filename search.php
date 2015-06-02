@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="seasrch.php" method=post>
+<form action="search.php" method=post>
 <input type="VORNAME" name="key_Vname">
 <input type="NNAME" name="key_Nname">
 <input type="SSVN" name="key_ssvn">
