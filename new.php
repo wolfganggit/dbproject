@@ -1,8 +1,116 @@
 <html>
   <head>
-    <title></title>
+    <title>Add new Entries </title>
     <meta content="">
-    <style></style>
+    <link rel="stylesheet" href="dbproject.css" title="dbproject" />
+
+    <script type="text/javascript">
+      /***********************************************
+      * Drop Down Date select script- by JavaScriptKit.com
+      * This notice MUST stay intact for use
+      * Visit JavaScript Kit at http://www.javascriptkit.com/ for this script and more
+      ***********************************************/
+
+      var monthtext=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+
+      function populatedropdown(dayfield, monthfield, yearfield){
+      var today=new Date()
+      var dayfield=document.getElementById(dayfield)
+      var monthfield=document.getElementById(monthfield)
+      var yearfield=document.getElementById(yearfield)
+      for (var i=0; i<31; i++)
+      dayfield.options[i]=new Option(i, i+1)
+      dayfield.options[today.getDate()]=new Option(today.getDate(), today.getDate(), true, true) //select today's day
+      for (var m=0; m<12; m++)
+      monthfield.options[m]=new Option(monthtext[m], monthtext[m])
+      monthfield.options[today.getMonth()]=new Option(monthtext[today.getMonth()], monthtext[today.getMonth()], true, true) //select today's month
+      var thisyear=today.getFullYear()
+      for (var y=0; y<100; y++){
+      yearfield.options[y]=new Option(thisyear, thisyear)
+      thisyear-=1
+      }
+      yearfield.options[0]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+      }
+    </script>
+
+
+
+    <style type="text/css">
+		body { background-repeat: repeat;}
+		#container {background-color: red; width: 800px; height: 600px;  
+			margin-left: auto; margin-right: auto ;
+			margin-top: 20px; background-image: url(upfeathers.png); }
+    </style>
+
   </head>
-  <body></body>
+
+  <body>
+  	<h1 style="text-align: center; margin-top:70px;"> Add a Person </h1>
+
+  <img src=""></img>
+
+
+  	<div id="container">
+      <form method="post" action="script.php">
+
+        <fieldset>
+          <input type="radio" id="patient" name="patient" value="patient"><label for="mc"> patient </label><br> 
+          <input type="radio" id="nurse" name="nurse" value="nurse"><label for="vi">  nurse </label><br> 
+          <input type="radio" id="doctor" name="doctor" value="doctor"><label for="ae"> doctor </label> 
+        </fieldset>
+
+        <p> Gender:
+          </p>
+
+
+        <p> Title:
+        <input name="title" type="text" size="30" maxlength="30"></p>
+
+          <p>Vorname:  
+          <input name="vorname" type="text" size="30" maxlength="30"></p>
+
+          <p>Nachname:
+          <input name="nachname" type="text" size="30" maxlength="40"></p>
+          
+          <p> Birthday:                
+            <select id="daydropdown"> </select> 
+            <select id="monthdropdown"> </select> 
+            <select id="yeardropdown"> </select> 
+
+            <script type="text/javascript">
+              //populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
+              window.onload=function(){
+              populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
+              }
+            </script>
+          </p>
+
+
+
+          <p> Social Security Number:
+          <input name="ssn" type="text" size="30" maxlength="40"></p>
+
+          <p> Address
+            Streetname:
+            Street Number:
+            Town:
+            Postalcode
+            Nation: 
+          </p>
+
+
+
+
+          <p><input name="senden" type="submit" value="Senden"></p>
+
+          
+
+      </form>
+
+	   </div>
+
+
+
+
+  </body>
 </html>
