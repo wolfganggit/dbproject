@@ -6,8 +6,11 @@
 </head>
 <body>
 
-<form action="scuhen.php" method=post>
-<input type="text" name="keyword">
+<form action="seasrch.php" method=post>
+<input type="VORNAME" name="key_Vname">
+<input type="NNAME" name="key_Nname">
+<input type="SSVN" name="key_ssvn">
+<input type="ORT" name="key_ort">
 <input type="submit" value="Suchen">
 </form>
 
@@ -15,17 +18,21 @@
 
 <?php
     
+<<<<<<< Updated upstream
     $stichwort = mysql_real_escape_string( $_GET['keyword']);
+=======
+    $stichwort = mysql_real_ escape_string( $_GET['keyword']);
+ //  POST SQL CONNECT
+>>>>>>> Stashed changes
     
-    MySQL_connect("hostname", "username", "password");
-    MySQL_select_db("database", $db);
+    /*$sql = " SELECT *, MATCH(title,body) AGAINST('$stichwort') AS score FROM articles WHERE MATCH(title, body)    AGAINST('$stichwort') ORDER BY score DESC";
     
-    $sql = " SELECT *, MATCH(title,body) AGAINST('$stichwort') AS score FROM articles WHERE MATCH(title, body)    AGAINST('$stichwort') ORDER BY score DESC";
-    
-    $res = MySQL_query($sql);
+    $res = MySQL_query($sql);*/
     ?>
 
 
+
+//TABLE
 <table>
 <tr><td>SCORE</td><td>TITLE</td><td>
 ID#</td></tr>
@@ -40,7 +47,7 @@ ID#</td></tr>
     }
     
     
-    mysql_close($db);
+
     
     
     ?>
