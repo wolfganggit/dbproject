@@ -136,6 +136,67 @@
    </div>
 
 
+    <?php
+    // Verbindungsaufbau und Auswahl der Datenbank
+    //ss verbindung: ssh -L 10000:biber:5432 astadler@sshstud.cosy.sbg.ac.at
+
+    $dbconn = pg_connect("host=localhost dbname=postgres user=astadler password=aecheeteihii port=10000")
+        or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
+
+    //echo "Verbindung geöffnet";
+    $ssn = "1010100272";
+
+    $ssnq = "'" . $ssn ."';";
+
+    // Read Information about Person
+    $query = 'SELECT * FROM "Person" WHERE ssn = ' . $ssnq;
+
+    $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+
+    $rows = pg_num_rows($result);
+
+    if ($rows == "0")
+    {
+      echo "<h1>Fehler im System: Die Angegebene Person wurde nicht gefunden!!!</h1>";
+    }
+    else{
+
+      // echo $rows;
+      // Ergebnisse in HTML ausgeben
+      //echo "<table>\n";
+      $line = pg_fetch_array($result, NULL, PGSQL_ASSOC);
+      
+
+      $title = $line["title"];
+      
+        $birthday = $line["birthday"];
+        
+        $gender = $line["gender"];
+      
+        $firstname = $line["firstname"];
+        
+        $familyname = $line["familyname"];
+        
+        $streetnumber = $line["streetnumber"];
+        
+        $streetname = $line["streetname"];
+        
+        $town = $line["town"];
+        
+        $postalcode = $line["postalcode"];
+        
+        $nation = $line["nation"];
+
+    }
+    // Speicher freigeben
+    pg_free_result($result);
+
+    // Verbindung schließen
+    pg_close($dbconn);
+    ?>
+   
+
+
 
 
   </body>
