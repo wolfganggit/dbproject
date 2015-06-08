@@ -43,20 +43,20 @@
      
   	<div id="container">
       <div id = "border">
-      <form method="post" action="script.php">
+      <form method="GET" action="new.php">
 
         <fieldset>
-          <input type="radio" id="patient" name="patient" value="patient"><label for="patient"> patient </label><br> 
-          <input type="radio" id="nurse" name="patient" value="nurse"><label for="nurse">  nurse </label><br> 
-          <input type="radio" id="doctor" name="patient" value="doctor"><label for="doctor"> doctor </label> 
+          <input type="radio" id="patient" name="person" value="patient"><label for="patient"> patient </label><br> 
+          <input type="radio" id="nurse" name="person" value="nurse"><label for="nurse">  nurse </label><br> 
+          <input type="radio" id="doctor" name="person" value="doctor"><label for="doctor"> doctor </label> 
         </fieldset>
 
         <p>
              <fieldset>
                 <strong> Gender: </strong> <br>
-                <input type="radio" id="female" name="gender" value="female"><label for="mc"> female </label><br> 
-                <input type="radio" id="male" name="gender" value="male"><label for="vi">  male </label><br> 
-                <input type="radio" id="other" name="gender" value="other"><label for="ae"> other </label> 
+                <input type="radio" id="female" name="gender" value="f"><label for="mc"> female </label><br> 
+                <input type="radio" id="male" name="gender" value="m"><label for="vi">  male </label><br> 
+                <input type="radio" id="other" name="gender" value="o"><label for="ae"> other </label> 
               </fieldset>
           </p>
 
@@ -71,9 +71,9 @@
         <input name="nachname" type="text" size="30" maxlength="40"></p>
         
         <p> Birthday:                
-          <select id="daydropdown"> </select> 
-          <select id="monthdropdown"> </select> 
-          <select id="yeardropdown"> </select> 
+          <select id="daydropdown" name="daydropdown"> </select> 
+          <select id="monthdropdown" name="monthdropdown"> </select> 
+          <select id="yeardropdown" name="yeardropdown"> </select> 
 
           <script type="text/javascript">
             //populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
@@ -150,16 +150,66 @@
 //                   VALUES('+1 123 456 7890', 'John', 'Doe');");
 
     // Read Information about Person
-    $query = "INSERT INTO Person VALUES ('1010100299', 'Dr.', '1972-02-10', 'm',
-      'Hias', 'Huber', '13 A', 'Haunspergstraße', 'Salzburg')";
 
+    $patient = $_GET["patient"];
+    $gender = $_GET["vorname"];
+    $title = $_GET["title"];
+    $vorname = $_GET["vorname"];
+    $nachname = $_GET["nachname"];
+    $birthday =  $_GET["yeardropdown"] . "-" . $_GET["monthdropdown"] . "-" . $_GET["daydropdown"];
+    $ssn = $_GET["ssn"];
+    $streetname = $_GET["streetname"];
+    $streetnumber = $_GET["streetnumber"];
+    $town = $_GET["town"];
+    $postalcode = $_GET["postalcode"];
+    $nation = $_GET["nation"];
 
+    //patient vallues
+    $condition = $_GET["condition"];
+
+    //staff values
+    $hours = $_GET["hours"];  //currently 2 fields (for nurse and for doctor) with the same name
+
+    //nurse values
+    $permission = $_GET["permission"];
+
+    //docotor values
+    $expertise = $_GET["expertise"];
+
+    echo $name;
+
+    $SSN = "1010100299";
+    
+
+    $query = 'INSERT INTO "Person" VALUES ( . $SSN . )';
+
+    // , Dr., "1972-02-10", "m",
+     // "Hias", "Huber", "13 A", "Haunspergstraße", "Salzburg"
 
     $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
     
 
+    if($_GET["person"] == "patient"){
+      $patientQuery = 'INSERT INTO "Patient" VALUES ()';
+      $patientResult = pg_query($patientQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error());  
+    }
+    elseif ($_GET["person"] == "nurse") {
+      $staffQuery = 'INSERT INTO "Staff" VALUES ()';
+      $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
 
+      $nurseQuery = 'INSERT INTO "Nurse" VALUES ()';
+      $nurseResult = pg_query($nurseQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
 
+      $permissionsQuery = 'INSERT INTO "Nursepermissionsto" VALUES ()';
+      $permissionsResult = pg_query($permissionsQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+    }
+    elseif ($_GET["person"] == "doctor") {
+      $staffQuery = 'INSERT INTO "Staff" VALUES ()';
+      $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+      
+      $doctorQuery = 'INSERT INTO "Doctor" VALUES ()';
+      $doctorResult = pg_query($doctorQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+    }
 
     // Verbindung schließen
     pg_close($dbconn);
