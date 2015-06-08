@@ -1,6 +1,8 @@
+<!DOCTYPE html>
+
 <html>
   <head>
-    <title>Add new Entries </title>
+    <title>Add a New Person </title>
     <meta content="">
     <link rel="stylesheet" href="dbproject.css" title="dbproject" />
 
@@ -33,81 +35,166 @@
       }
     </script>
 
-
-
-    <style type="text/css">
-		body { background-repeat: repeat;}
-		#container {background-color: red; width: 800px; height: 600px;  
-			margin-left: auto; margin-right: auto ;
-			margin-top: 20px; background-image: url(upfeathers.png); }
-    </style>
-
   </head>
 
   <body>
   	<h1 style="text-align: center; margin-top:70px;"> Add a Person </h1>
 
-  <img src=""></img>
-
-
+     
   	<div id="container">
+      <div id = "border">
       <form method="post" action="script.php">
 
         <fieldset>
-          <input type="radio" id="patient" name="patient" value="patient"><label for="mc"> patient </label><br> 
-          <input type="radio" id="nurse" name="nurse" value="nurse"><label for="vi">  nurse </label><br> 
-          <input type="radio" id="doctor" name="doctor" value="doctor"><label for="ae"> doctor </label> 
+          <input type="radio" id="patient" name="patient" value="patient"><label for="patient"> patient </label><br> 
+          <input type="radio" id="nurse" name="patient" value="nurse"><label for="nurse">  nurse </label><br> 
+          <input type="radio" id="doctor" name="patient" value="doctor"><label for="doctor"> doctor </label> 
         </fieldset>
 
-        <p> Gender:
+        <p>
+             <fieldset>
+                <strong> Gender: </strong> <br>
+                <input type="radio" id="female" name="gender" value="female"><label for="mc"> female </label><br> 
+                <input type="radio" id="male" name="gender" value="male"><label for="vi">  male </label><br> 
+                <input type="radio" id="other" name="gender" value="other"><label for="ae"> other </label> 
+              </fieldset>
           </p>
 
 
         <p> Title:
-        <input name="title" type="text" size="30" maxlength="30"></p>
+          <input name="title" type="text" size="30" maxlength="30"></p>
 
-          <p>Vorname:  
-          <input name="vorname" type="text" size="30" maxlength="30"></p>
+        <p>Vorname:  
+        <input name="vorname" type="text" size="30" maxlength="30"></p>
 
-          <p>Nachname:
-          <input name="nachname" type="text" size="30" maxlength="40"></p>
-          
-          <p> Birthday:                
-            <select id="daydropdown"> </select> 
-            <select id="monthdropdown"> </select> 
-            <select id="yeardropdown"> </select> 
+        <p>Nachname:
+        <input name="nachname" type="text" size="30" maxlength="40"></p>
+        
+        <p> Birthday:                
+          <select id="daydropdown"> </select> 
+          <select id="monthdropdown"> </select> 
+          <select id="yeardropdown"> </select> 
 
-            <script type="text/javascript">
-              //populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
-              window.onload=function(){
-              populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
-              }
-            </script>
-          </p>
-
-
-
-          <p> Social Security Number:
-          <input name="ssn" type="text" size="30" maxlength="40"></p>
-
-          <p> Address
-            Streetname:
-            Street Number:
-            Town:
-            Postalcode
-            Nation: 
-          </p>
+          <script type="text/javascript">
+            //populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
+            window.onload=function(){
+            populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
+            }
+          </script>
+        </p>
 
 
 
+        <p> Social Security Number:
+        <input name="ssn" type="text" size="30" maxlength="40"></p>
 
-          <p><input name="senden" type="submit" value="Senden"></p>
+        <hr>
 
-          
+        <p> 
+          <strong>Address</strong> <br>
+          Street Name: <input name="streetname" type="text" size="30" maxlength="40"> <br> <br>
+          Street Number:  <input name="streetnumber" type="text" size="30" maxlength="40"> <br> <br>
+          Town: <input name="town" type="text" size="30" maxlength="40"> <br> <br>
+          Postalcode: <input name="postalcode" type="text" size="30" maxlength="40"> <br> <br>
+          Nation: <input name="nation" type="text" size="30" maxlength="40"> <br> <br>
+        </p>
 
-      </form>
+        <hr>
+
+
+        <p>
+          <strong> For Patients: </strong> <br>
+          Conditiion: <input name="condition" type="text" size="30" maxlength="40"> <br><br>
+          treated by? <br>
+        </p>  
+
+        <hr>
+
+        <p>
+          <strong> Nurse: </strong> <br>
+          Permission to: <input name="permission" type="text" size="30" maxlength="40"> <br><br>
+          Working Hours (per week): <input name="hours" type="text" size="30" maxlength="40"> <br>
+        </p>
+
+        <hr>
+
+        <p>
+          <strong> Doctor: </strong> <br>
+          Area of Expertise: <input name="expertise" type="text" size="30" maxlength="40"> <br><br>
+          Working Hours (per week): <input name="hours" type="text" size="30" maxlength="40"> <br>
+        </p>
+
+
+
+        <p><input name="submit" type="submit" value="submit"></p>
+
+        
+
+    </form>
 
 	   </div>
+   </div>
+
+
+    <?php
+    // Verbindungsaufbau und Auswahl der Datenbank
+    //ss verbindung: ssh -L 10000:biber:5432 astadler@sshstud.cosy.sbg.ac.at
+
+    $dbconn = pg_connect("host=localhost dbname=postgres user=astadler password=aecheeteihii port=10000")
+        or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
+
+    //echo "Verbindung geöffnet";
+    $ssn = "1010100272";
+
+    $ssnq = "'" . $ssn ."';";
+
+    // Read Information about Person
+    $query = 'SELECT * FROM "Person" WHERE ssn = ' . $ssnq;
+
+    $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+
+    $rows = pg_num_rows($result);
+
+    if ($rows == "0")
+    {
+      echo "<h1>Fehler im System: Die Angegebene Person wurde nicht gefunden!!!</h1>";
+    }
+    else{
+
+      // echo $rows;
+      // Ergebnisse in HTML ausgeben
+      //echo "<table>\n";
+      $line = pg_fetch_array($result, NULL, PGSQL_ASSOC);
+      
+
+      $title = $line["title"];
+      
+        $birthday = $line["birthday"];
+        
+        $gender = $line["gender"];
+      
+        $firstname = $line["firstname"];
+        
+        $familyname = $line["familyname"];
+        
+        $streetnumber = $line["streetnumber"];
+        
+        $streetname = $line["streetname"];
+        
+        $town = $line["town"];
+        
+        $postalcode = $line["postalcode"];
+        
+        $nation = $line["nation"];
+
+    }
+    // Speicher freigeben
+    pg_free_result($result);
+
+    // Verbindung schließen
+    pg_close($dbconn);
+    ?>
+   
 
 
 
