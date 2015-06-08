@@ -20,20 +20,20 @@
 
 
 <?php
-
+// Check ob Suche Button gedrückt, wenn ja dann DB Connect und Suche
     if (isset($post['suche_enter']))
-    
     {
     $dbconn = pg_connect("host=localhost dbname=postgres user=rmajewski password=eecighoixehu port=10000")
     or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
     
         $suchbegriff= $_post("suchfeld");
+        
         //to do: sql injection vermeiden
-    
-        $sql = "SELECT title, birthday, gender, firstname, familyname, streetnumber, streetname, town, postalcode, nation FROM Person WHERE title LIKE '%&suchbegriff%' OR birthday LIKE '%&suchbegriff%' OR gender LIKE '%&suchbegriff%' OR firstname LIKE '%&suchbegriff%' OR familyname LIKE '%&suchbegriff%' OR streetnumber LIKE '%&suchbegriff%' OR streetname LIKE '%&suchbegriff%' OR town LIKE '%&suchbegriff%' OR postalcode LIKE '%&suchbegriff%'";
+        $sql = "SELECT title, birthday, gender, firstname, familyname, streetnumber, streetname, town, postalcode, nation FROM Person WHERE title LIKE '%$suchbegriff%' OR birthday LIKE '%$suchbegriff%' OR gender LIKE '%$suchbegriff%' OR firstname LIKE '%$suchbegriff%' OR familyname LIKE '%$suchbegriff%' OR streetnumber LIKE '%$suchbegriff%' OR streetname LIKE '%$suchbegriff%' OR town LIKE '%$suchbegriff%' OR postalcode LIKE '%$suchbegriff%'";
         
         $result = pg_query($dbconn, $sql);
         
+        //Ausgabe
         echo "<table>";
         while($row = pg_fetch_row($result)) {
             echo "<tr>";
@@ -43,6 +43,15 @@
         }
         echo "</table>";
  
+        
+        // Speicher freigeben
+        pg_free_result($result);
+        
+        // Verbindung schließen
+        pg_close($dbconn);
+ 
+        
+        
     ?>
 
 
@@ -105,12 +114,7 @@
  
  
  
- // Speicher freigeben
- pg_free_result($result);
- 
- // Verbindung schließen
- pg_close($dbconn);
- 
+
 
  
  */
