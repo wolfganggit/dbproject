@@ -144,52 +144,22 @@
         or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
 
     //echo "Verbindung geöffnet";
-    $ssn = "1010100272";
 
-    $ssnq = "'" . $ssn ."';";
+
+// $result = pg_query($dbconn, "INSERT INTO phonebook(phone, firstname, lastname) 
+//                   VALUES('+1 123 456 7890', 'John', 'Doe');");
 
     // Read Information about Person
-    $query = 'SELECT * FROM "Person" WHERE ssn = ' . $ssnq;
+    $query = "INSERT INTO Person VALUES ('1010100299', 'Dr.', '1972-02-10', 'm',
+      'Hias', 'Huber', '13 A', 'Haunspergstraße', 'Salzburg')";
+
+
 
     $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+    
 
-    $rows = pg_num_rows($result);
 
-    if ($rows == "0")
-    {
-      echo "<h1>Fehler im System: Die Angegebene Person wurde nicht gefunden!!!</h1>";
-    }
-    else{
 
-      // echo $rows;
-      // Ergebnisse in HTML ausgeben
-      //echo "<table>\n";
-      $line = pg_fetch_array($result, NULL, PGSQL_ASSOC);
-      
-
-      $title = $line["title"];
-      
-        $birthday = $line["birthday"];
-        
-        $gender = $line["gender"];
-      
-        $firstname = $line["firstname"];
-        
-        $familyname = $line["familyname"];
-        
-        $streetnumber = $line["streetnumber"];
-        
-        $streetname = $line["streetname"];
-        
-        $town = $line["town"];
-        
-        $postalcode = $line["postalcode"];
-        
-        $nation = $line["nation"];
-
-    }
-    // Speicher freigeben
-    pg_free_result($result);
 
     // Verbindung schließen
     pg_close($dbconn);
