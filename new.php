@@ -2,7 +2,7 @@
 Todos:
  Querys Anführungsstriche
  insert into permissions - multi value
-
+ staff einfügbar?
 
 Bonus:
 Felder dynamisch ein- und ausblenden
@@ -68,7 +68,7 @@ Undefined index error - Lösung: isset()
         </fieldset>
 
         <p>
-             <fieldset>
+             <fieldset name="gender">
                 <strong> Gender: </strong> <br>
                 <input type="radio" id="female" name="gender" value="f"><label for="f"> female </label><br> 
                 <input type="radio" id="male" name="gender" value="m"><label for="m">  male </label><br> 
@@ -124,12 +124,20 @@ Undefined index error - Lösung: isset()
           treated by? <br>
         </p>  
 
+
+        <hr>
+
+        <p>
+          <strong> Staff: </strong> <br>
+          Working Hours (per week): <input name="hours" type="text" size="30" maxlength="40"> <br>
+        </p>
+
+
         <hr>
 
         <p>
           <strong> Nurse: </strong> <br>
           Permission to: <input name="permission" type="text" size="30" maxlength="40"> <br><br>
-          Working Hours (per week): <input name="hours" type="text" size="30" maxlength="40"> <br>
         </p>
 
         <hr>
@@ -137,7 +145,6 @@ Undefined index error - Lösung: isset()
         <p>
           <strong> Doctor: </strong> <br>
           Area of Expertise: <input name="expertise" type="text" size="30" maxlength="40"> <br><br>
-          Working Hours (per week): <input name="hours" type="text" size="30" maxlength="40"> <br>
         </p>
 
 
@@ -198,8 +205,23 @@ Undefined index error - Lösung: isset()
     //docotor values
     $expertise = $_GET["expertise"];
 
-    //echo $vorname;
-    //$SSN = "1010100299";
+    //tests
+    // echo  $person;
+    // echo $gender;
+    // echo $title;
+    // echo $vorname;
+    // echo  $nachname;  
+    // echo $birthday;
+    // echo $ssn;
+    // echo $streetname;
+    // echo $streetnumber;
+    // echo $town;
+    // echo $postalcode;
+    // echo $nation;
+    // echo $condition;
+    // echo $hours;
+    // echo $permission;
+    // echo $expertise;
     
 
     $query = 'INSERT INTO "Person" VALUES ( . $SSN . )';
