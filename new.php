@@ -1,3 +1,19 @@
+<!-- 
+Todos:
+ Querys Anführungsstriche
+ insert into permissions - multi value
+
+
+Bonus:
+Felder dynamisch ein- und ausblenden
+Label, wenn erfolgreich eingefügt wurde
+
+
+Erledigt:
+Undefined index error - Lösung: isset()
+
+-->
+
 <!DOCTYPE html>
 
 <html>
@@ -45,7 +61,7 @@
       <div id = "border">
       <form method="GET" action="new.php">
 
-        <fieldset>
+        <fieldset name = "person">
           <input type="radio" id="patient" name="person" value="patient"><label for="patient"> patient </label><br> 
           <input type="radio" id="nurse" name="person" value="nurse"><label for="nurse">  nurse </label><br> 
           <input type="radio" id="doctor" name="person" value="doctor"><label for="doctor"> doctor </label> 
@@ -54,9 +70,9 @@
         <p>
              <fieldset>
                 <strong> Gender: </strong> <br>
-                <input type="radio" id="female" name="gender" value="f"><label for="mc"> female </label><br> 
-                <input type="radio" id="male" name="gender" value="m"><label for="vi">  male </label><br> 
-                <input type="radio" id="other" name="gender" value="o"><label for="ae"> other </label> 
+                <input type="radio" id="female" name="gender" value="f"><label for="f"> female </label><br> 
+                <input type="radio" id="male" name="gender" value="m"><label for="m">  male </label><br> 
+                <input type="radio" id="other" name="gender" value="o"><label for="o"> other </label> 
               </fieldset>
           </p>
 
@@ -151,12 +167,18 @@
 
     // Read Information about Person
 
-    $patient = $_GET["patient"];
-    $gender = $_GET["vorname"];
+    
+    $person = isset($_GET["person"]) ? $_GET["person"] : '';
+    $gender = isset($_GET["gender"]) ? $_GET["gender"] : '';
     $title = $_GET["title"];
     $vorname = $_GET["vorname"];
     $nachname = $_GET["nachname"];
-    $birthday =  $_GET["yeardropdown"] . "-" . $_GET["monthdropdown"] . "-" . $_GET["daydropdown"];
+
+    $yeardropdown = isset($_GET["yeardropdown"]) ? $_GET["yeardropdown"] : '';    
+    $monthdropdown = isset($_GET["monthdropdown"]) ? $_GET["monthdropdown"] : '';    
+    $daydropdown = isset($_GET["daydropdown"]) ? $_GET["daydropdown"] : '';    
+    $birthday =  $yeardropdown . "-" . $monthdropdown . "-" . $daydropdown;
+
     $ssn = $_GET["ssn"];
     $streetname = $_GET["streetname"];
     $streetnumber = $_GET["streetnumber"];
@@ -176,9 +198,8 @@
     //docotor values
     $expertise = $_GET["expertise"];
 
-    echo $name;
-
-    $SSN = "1010100299";
+    //echo $vorname;
+    //$SSN = "1010100299";
     
 
     $query = 'INSERT INTO "Person" VALUES ( . $SSN . )';
