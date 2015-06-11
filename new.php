@@ -216,12 +216,12 @@ Undefined index error - Lösung: isset()
     // echo $expertise;
     
 
-<<<<<<< HEAD
+
     $query = 'INSERT INTO "Person" (ssn,firstname,familyname,nation,title,gender,streetname,streetnumber,town,postalcode,birthday) VALUES (' . 
             $ssn . ",'".$vorname . "','".$nachname."','".$nation."','".$title."','".$gender."','".$streetname."','".$streetnumber."','".$town."','".$postalcode."','".$birthday."')";
-=======
-    if(isset($_GET["vorname"];)){
->>>>>>> 70ca962d8f3f4f06763b8d04f8262429d6e53fd4
+
+    if(isset($_GET["vorname"])){
+
 
       // Verbindungsaufbau und Auswahl der Datenbank
       //ss verbindung: ssh -L 10000:biber:5432 astadler@sshstud.cosy.sbg.ac.at
