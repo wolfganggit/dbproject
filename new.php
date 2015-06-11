@@ -4,6 +4,8 @@ Todos:
  insert into permissions - multi value
  staff einfügbar?
 
+Sendemethode auf Post ändern
+
 Bonus:
 Felder dynamisch ein- und ausblenden
 Label, wenn erfolgreich eingefügt wurde
@@ -184,7 +186,11 @@ Undefined index error - Lösung: isset()
     $yeardropdown = isset($_GET["yeardropdown"]) ? $_GET["yeardropdown"] : '';    
     $monthdropdown = isset($_GET["monthdropdown"]) ? $_GET["monthdropdown"] : '';    
     $daydropdown = isset($_GET["daydropdown"]) ? $_GET["daydropdown"] : '';    
-    $birthday =  $yeardropdown . "-" . $monthdropdown . "-" . $daydropdown;
+    $monthtext=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+    $birthm = (array_search ( $_POST['monthdropdown'] , $monthtext ))+1;
+    
+    
+    $birthday =  $yeardropdown . "-" . $birthm . "-" . $daydropdown;
 
     $ssn = $_GET["ssn"];
     $streetname = $_GET["streetname"];
@@ -224,7 +230,8 @@ Undefined index error - Lösung: isset()
     // echo $expertise;
     
 
-    $query = 'INSERT INTO "Person" VALUES ( . $SSN . )';
+    $query = 'INSERT INTO "Person" (ssn,firstname,familyname,nation,title,gender,streetname,streetnumber,town,postalcode,birthday) VALUES (' . 
+            $ssn . ",'".$vorname . "','".$nachname."','".$nation."','".$title."','".$gender."','".$streetname."','".$streetnumber."','".$town."','".$postalcode."','".$birthday."')";
 
     // , Dr., "1972-02-10", "m",
      // "Hias", "Huber", "13 A", "Haunspergstraße", "Salzburg"
