@@ -162,20 +162,6 @@ Undefined index error - Lösung: isset()
 
 
     <?php
-    // Verbindungsaufbau und Auswahl der Datenbank
-    //ss verbindung: ssh -L 10000:biber:5432 astadler@sshstud.cosy.sbg.ac.at
-
-    $dbconn = pg_connect("host=localhost dbname=postgres user=astadler password=aecheeteihii port=10000")
-        or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
-
-    //echo "Verbindung geöffnet";
-
-
-// $result = pg_query($dbconn, "INSERT INTO phonebook(phone, firstname, lastname) 
-//                   VALUES('+1 123 456 7890', 'John', 'Doe');");
-
-    // Read Information about Person
-
     
     $person = isset($_GET["person"]) ? $_GET["person"] : '';
     $gender = isset($_GET["gender"]) ? $_GET["gender"] : '';
@@ -230,39 +216,65 @@ Undefined index error - Lösung: isset()
     // echo $expertise;
     
 
+<<<<<<< HEAD
     $query = 'INSERT INTO "Person" (ssn,firstname,familyname,nation,title,gender,streetname,streetnumber,town,postalcode,birthday) VALUES (' . 
             $ssn . ",'".$vorname . "','".$nachname."','".$nation."','".$title."','".$gender."','".$streetname."','".$streetnumber."','".$town."','".$postalcode."','".$birthday."')";
+=======
+    if(isset($_GET["vorname"];)){
+>>>>>>> 70ca962d8f3f4f06763b8d04f8262429d6e53fd4
 
-    // , Dr., "1972-02-10", "m",
-     // "Hias", "Huber", "13 A", "Haunspergstraße", "Salzburg"
+      // Verbindungsaufbau und Auswahl der Datenbank
+      //ss verbindung: ssh -L 10000:biber:5432 astadler@sshstud.cosy.sbg.ac.at
 
-    $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
-    
+      $dbconn = pg_connect("host=localhost dbname=postgres user=astadler password=aecheeteihii port=10000")
+          or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
 
-    if($_GET["person"] == "patient"){
-      $patientQuery = 'INSERT INTO "Patient" VALUES ()';
-      $patientResult = pg_query($patientQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error());  
-    }
-    elseif ($_GET["person"] == "nurse") {
-      $staffQuery = 'INSERT INTO "Staff" VALUES ()';
-      $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+      //echo "Verbindung geöffnet";
 
-      $nurseQuery = 'INSERT INTO "Nurse" VALUES ()';
-      $nurseResult = pg_query($nurseQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
 
-      $permissionsQuery = 'INSERT INTO "Nursepermissionsto" VALUES ()';
-      $permissionsResult = pg_query($permissionsQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
-    }
-    elseif ($_GET["person"] == "doctor") {
-      $staffQuery = 'INSERT INTO "Staff" VALUES ()';
-      $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+      // $result = pg_query($dbconn, "INSERT INTO phonebook(phone, firstname, lastname) 
+      //                   VALUES('+1 123 456 7890', 'John', 'Doe');");
+
+      // Read Information about Person
+
+
+
+      $query = 'INSERT INTO "Person" VALUES ( . $SSN . )';
+
+      // , Dr., "1972-02-10", "m",
+       // "Hias", "Huber", "13 A", "Haunspergstraße", "Salzburg"
+
+      $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
       
-      $doctorQuery = 'INSERT INTO "Doctor" VALUES ()';
-      $doctorResult = pg_query($doctorQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
-    }
 
-    // Verbindung schließen
-    pg_close($dbconn);
+      if($_GET["person"] == "patient"){
+        $patientQuery = 'INSERT INTO "Patient" VALUES ()';
+        $patientResult = pg_query($patientQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error());  
+      }
+      elseif ($_GET["person"] == "nurse") {
+        $staffQuery = 'INSERT INTO "Staff" VALUES ()';
+        $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+
+        $nurseQuery = 'INSERT INTO "Nurse" VALUES ()';
+        $nurseResult = pg_query($nurseQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+
+        $permissionsQuery = 'INSERT INTO "Nursepermissionsto" VALUES ()';
+        $permissionsResult = pg_query($permissionsQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+      }
+      elseif ($_GET["person"] == "doctor") {
+        $staffQuery = 'INSERT INTO "Staff" VALUES ()';
+        $staffResult = pg_query($staffQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+        
+        $doctorQuery = 'INSERT INTO "Doctor" VALUES ()';
+        $doctorResult = pg_query($doctorQuery) or die('Abfrage fehlgeschlagen: ' . pg_last_error()); 
+      }
+
+
+      // Verbindung schließen
+      pg_close($dbconn);
+
+    }
+    
     ?>
    
 
