@@ -2,6 +2,7 @@
 // Verbindungsaufbau und Auswahl der Datenbank
 
 $dbconn = pg_connect("host=localhost dbname=postgres user=wlehner password=earoophojaej port=10000")
+//$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=uxnd3no port=5432")
     or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
 
 //echo "Verbindung geöffnet";
@@ -12,7 +13,13 @@ $ssn = $_GET['ssn'];
 $ssnq = "'" . $ssn ."';";
 
 // Read Information about Person
-$query = 'SELECT * FROM "Person" WHERE ssn = ' . $ssnq;
+$query = 'SELECT case when pa.personssn is not null then true else false end as ispatient,' .
+'case when d.staffssn is not null then true else false end as isdoctor,'.
+'case when n.staffssn is not null then true else false end as isnurse,'.
+'pe.*,pa.condition,d.areaofexpertise '.
+'FROM (("Person" pe left outer join "Patient" pa on pe.ssn = pa.personssn) '.
+'	left outer join "Doctor" d on pe.ssn = d.staffssn) left outer join "Nurse" n on pe.ssn = n.staffssn '.
+'WHERE ssn = ' . $ssnq;
 
 $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
 
@@ -49,11 +56,37 @@ else{
   	$postalcode = $line["postalcode"];
   	
   	$nation = $line["nation"];
+        
+        $ispatient = $line["ispatient"];
+        
+        $isdoctor = $line["isdoctor"];
+        
+        $isnurse = $line["isnurse"];
+        
+        $condition = $line["condition"];
+        
+        $areaofexpertise = $line["areaofexpertise"];
 
 }
 // Speicher freigeben
 pg_free_result($result);
 
+
+$query="select title,firstname,familyname,ssn from \"Person\" p,\"Doctor\" d where p.ssn = d.staffssn";
+
+$result = pg_query($dbconn, $query);
+$doctors_opts = '<option value="" selecteds></option>';
+while($line = pg_fetch_array($result)) {
+    $docname = $line['title'] . ' ' . $line['firstname'] . ' ' . $line['familyname'];
+    $docssn = $line['ssn'];
+    $doctors_opts .= '<option value="' . $docssn . '">' . $docname . '</option>';
+}
+
+$patientcheck = "false";
+if($ispatient=='t')
+{
+    $patientcheck = "true";
+}
 // Verbindung schließen
 pg_close($dbconn);
 
@@ -120,7 +153,8 @@ $birthd = substr($birthday,8,2);
       ***********************************************/
 
       var monthtext=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
-
+      var treatingdocs_listvals = new Array();
+      
       function populatedropdown(dayfield, monthfield, yearfield){
           var today=new Date();
           var dayfield=document.getElementById(dayfield);
@@ -142,10 +176,34 @@ $birthd = substr($birthday,8,2);
                   yearfield.options[y]=new Option(thisyear, thisyear);
               thisyear-=1;
           }
-
+          <?php echo 'document.getElementById("cb_patient").checked=' . $patientcheck . ';';?>
       }
-            
-        
+      function addtreatingdoc(newdoctor)
+      {
+          var tdl = document.getElementById('treatingdocs_list');
+          if(tdl.value == "" || tdl.value == null)
+            tdl.value += newdoctor.value;
+          else
+              tdl.value += ";" + newdoctor.value;
+              
+          if(newdoctor.value!='' && newdoctor.value!=null)
+          {
+              var sel = document.getElementById('treatingdocs');
+              sel.options[sel.options.length] = new Option(newdoctor.options[newdoctor.selectedIndex].text,newdoctor.value,false,true);
+          }
+      }
+      
+      function removeseldoc()
+      {
+          var tdl = document.getElementById('treatingdocs_list');
+          var sel = document.getElementById('treatingdocs');
+          tdl.value = tdl.value.replace(";" + sel.value,'');
+          tdl.value = tdl.value.replace(sel.value + ";",'');
+          tdl.value = tdl.value.replace(sel.value,'');
+          
+          
+          sel.remove(sel.selectedIndex);
+      }
     </script>
   </head>
     <body onload="populatedropdown('daydropdown', 'monthdropdown', 'yeardropdown');">
@@ -153,57 +211,55 @@ $birthd = substr($birthday,8,2);
         <h1 style="text-align: center; margin-top:70px;"> Edit Person </h1>
 
         <div id="container">
-          <div id = "border">
-            <h1>
-            SSN: <?php echo $ssn ?>
-            </h1>
+            <div id = "border">
+                <p>
+                    <h1>
+                    SSN: <?php echo $ssn ?>
+                    </h1>
+                </p>
                 <form action="saveedit.php" method="post">
-                    <table>
-                        <tr>
-                            <td>Gender: 
+                    <p>Gender: 
                                 m<input type="radio" id="genderm" name="genderm" onclick="setGender(this.id);" value="<?php if($gender == 'm'){echo 'true';}else{echo 'false';}?>" <?php if($gender == 'm'){echo 'checked';}?>/>
                                 f<input type="radio" id="genderf" name="genderf" onclick="setGender(this.id);" value="<?php if($gender == 'f'){echo 'true';}else{echo 'false';} ?>" <?php if($gender == 'f'){echo 'checked';}?>/>
-                            </td>
-                        </tr>
-                        <tr>
-                                <td>Title</td><td>Firstname</td><td>Familyname</td><td></td>
-                        </tr>
-                        <tr>
-                                <td><input type="input" id="title" name="title" value="<?php echo $title ?>"/></td>
-                                <td><input type="input" id="firstname" name ="firstname" value="<?php echo $firstname ?>"/></td>
-                                <td><input type="input" id="familyname" name="familyname" value="<?php echo $familyname ?>"/></td>
-                        </tr>
-                        <tr>
-                            <td>Nation</td>
-                            <td>Postalcode</td>
-                            <td>Town</td>
+                    </p>
 
-                        </tr>
-                        <tr>
-                                <td><select id="country" name="nation" id="nation"><?php echo $countryOptions; ?></select></td>
-                                <td><input type="input" id="postalcode" name="postalcode" value="<?php echo $postalcode ?>"/></td>
-                                <td><input type="input" id="town" name="town" value="<?php echo $town ?>"/></td>
-                        </tr>
-                        <tr>
-                            <td>Street</td>
-                            <td>Nr.</td>
-                            <td>Birthday</td>
-                        </tr>
-                        <tr>
-                                <td><input type="input" id="streetname" name="streetname" value="<?php echo $streetname ?>"/></td>
-                                <td><input type="input" id="streetnumber" name="streetnumber" value="<?php echo $streetnumber ?>" style="width:60px;"/></td>
-                                <td>
-                                    <select id="daydropdown" name="daydropdown"></select>
-                                    <select id="monthdropdown" name="monthdropdown"></select> 
-                                    <select id="yeardropdown" name="yeardropdown"></select> 
-                                </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"></td><td style="text-align:right;" ><input type="submit" value="Senden"></td>
-                        </tr>
-                    </table>
+                    <p> Title:
+                    <input name="title" type="text" size="30" maxlength="30" value="<?php echo $title ?>"></p>
+
+                    <p>Vorname:  
+                    <input name="firstname" id="firstname" type="text" size="30" maxlength="30" value="<?php echo $firstname ?>"></p>
+
+                    <p>Nachname:
+                        <input name="familyname" id="familyname" type="text" size="30" maxlength="40" value="<?php echo $familyname ?>"></p>
+
+                    <hr>
+
+                    <p> 
+                      <strong>Address</strong> <br>
+                      Street Name: <input name="streetname" type="text" size="30" maxlength="40" value="<?php echo $streetname ?>"> <br> <br>
+                      Street Number:  <input name="streetnumber" type="text" size="30" maxlength="40" value="<?php echo $streetnumber ?>"> <br> <br>
+                      Town: <input name="town" type="text" size="30" maxlength="40" value="<?php echo $town ?>"> <br> <br>
+                      Postalcode: <input type="text" id="postalcode" name="postalcode" value="<?php echo $postalcode ?>"/> <br> <br>
+                      Nation: <select name="nation" id="nation"><?php echo $countryOptions; ?></select> <br> <br>
+                    </p>
+
+                    <hr>
+
+
+                    <p>
+                      <strong> Is Patient  </strong> <input type="checkbox" id="cb_patient" name="cb_patient" ><br>
+                      Conditiion: <input name="condition" type="text" size="30" maxlength="40" value="<?php echo $condition; ?>"> <br><br>
+                      <div style="width:150px; float: left;">is treated By:</div> <select style="width:200px;" size="5" id="treatingdocs" name="treatingdocs"></select><input type="button" value="remove" onclick="removeseldoc();"><br>
+                      <div style="width:150px; float: left;">add doctor</div><select style="width:200px;" id="treatingdoc" name="treatingdoc" onchange="addtreatingdoc(this);"><?php echo $doctors_opts;?></select>
+                    </p>  
+
+
+                    <hr>
+
+                    <p><input type="submit" value="Senden"></p>s
 
                     <input type="hidden" id="ssn" name="ssn" value="<?php echo $ssn ?>"/>
+                    <input type="hidden" id="treatingdocs_list" name="treatingdocs_list">
                 </form>
             </div>
         </div>

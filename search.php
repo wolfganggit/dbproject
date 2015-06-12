@@ -31,6 +31,7 @@
     if (isset($_POST['suchfeld']))
     {
     $dbconn = pg_connect("host=localhost dbname=postgres user=rmajewski password=eecighoixehu port=10000")
+    //$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=uxnd3no port=5432")
     or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
     
     $suchbegriff= addslashes($_POST["suchfeld"]);

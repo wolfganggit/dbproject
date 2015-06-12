@@ -50,6 +50,7 @@
 </html>
 <?php
     $dbconn = pg_connect("host=localhost dbname=postgres user=wlehner password=earoophojaej port=10000")
+    //$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=uxnd3no port=5432")
     or die('Verbindungsaufbau fehlgeschlagen: ' . pg_last_error());
     
     $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
