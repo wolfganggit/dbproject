@@ -180,7 +180,11 @@ $birthd = substr($birthday,8,2);
     </script>
   </head>
     <body onload="populatedropdown('daydropdown', 'monthdropdown', 'yeardropdown');">
-
+        <div style="text-align: center; margin-top:15px;">
+          <a href ="index.html"> HOME </a> |
+          <a href ="search.php"> SEARCH </a> |
+          <a href ="new.php"> NEW </a>
+        </div>
         <h1 style="text-align: center; margin-top:70px;"> Edit Person </h1>
 
         <div id="container">

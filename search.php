@@ -10,14 +10,26 @@
         padding-left:2px;
         padding-right:2px;
     }
+
+    #border {width: auto;}
+    #container {width: auto; margin-left: 50px; margin-right: 50px; }
+
+
 </style>
 </head>
 <body>
+    <div style="text-align: center; margin-top:15px;">
+      <a href ="index.html"> HOME </a> |
+      <a href ="search.php"> SEARCH </a> |
+      <a href ="new.php"> NEW </a> 
+    </div>
 <h1 style="text-align: center; margin-top:70px;"> Search Person </h1>
 
-        <div id="container">
-          <div id = "border">
-<form action="search.php" method=post>
+<div id="container">
+<div id = "border">
+
+<div style=" width: 250px; margin-left: auto; margin-right: auto; margin-bottom:20px;">
+<form action="search.php" method= "post" style="margin-left: auto; margin-right: auto;">
 <input type="text" name="suchfeld">
 <input type="submit" name="suche_enter" value="Suchen">
 <!--<input type="VORNAME" name="key_Vname">
@@ -25,6 +37,7 @@
 <input type="SSVN" name="key_ssvn">
 <input type="ORT" name="key_ort">-->
 </form>
+</div>
 
 <?php
 // Check ob Suche Button gedrückt, wenn ja dann DB Connect und Suche
@@ -43,7 +56,9 @@
         $result = pg_query($dbconn, $sql);
         
         //Ausgabe
-        echo "<table style=\"border:1px solid;\">";
+    echo "<div style=\" padding-left: 20px; padding-right: 20px;\">";
+
+        echo "<table style=\"border:1px solid; margin-left: auto; margin-right: auto;\">";
         echo "<tr>";
         echo "<td>Title</td><td>Familyname</td><td>Firstname</td><td>Birthday</td><td>Gender</td><td>Nation</td><td>Postalcode</td><td>Town</td><td>Streetname</td><td>Streetnumber</td><td>SSN</td>";
         echo "</tr>";
@@ -82,7 +97,7 @@
             echo "</tr>";
         }
         echo "</table>";
- 
+ echo "</div>";
         
         // Speicher freigeben
         pg_free_result($result);

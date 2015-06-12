@@ -73,7 +73,12 @@ Sendemethode auf Post ändern
   </head>
 
   <body onload=" patientShow(); populatedropdown('daydropdown', 'monthdropdown', 'yeardropdown');">
-  	<h1 style="text-align: center; margin-top:70px;"> Add a Person </h1>
+    <div style="text-align: center; margin-top:15px;">
+      <a href ="index.html"> HOME </a> |
+      <a href ="search.php"> SEARCH </a> |
+      <a href ="new.php"> NEW </a> 
+    </div>
+  	<h1 style="text-align: center; margin-top:40px;"> Add a Person </h1>
 
      
   	<div id="container">
