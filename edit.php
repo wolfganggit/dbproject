@@ -72,20 +72,11 @@ else{
 pg_free_result($result);
 
 
-$query="select title,firstname,familyname,ssn from \"Person\" p,\"Doctor\" d where p.ssn = d.staffssn";
-
-$result = pg_query($dbconn, $query);
-$doctors_opts = '<option value="" selecteds></option>';
-while($line = pg_fetch_array($result)) {
-    $docname = $line['title'] . ' ' . $line['firstname'] . ' ' . $line['familyname'];
-    $docssn = $line['ssn'];
-    $doctors_opts .= '<option value="' . $docssn . '">' . $docname . '</option>';
-}
-
-$patientcheck = "false";
+$patientcond="none";
 if($ispatient=='t')
 {
-    $patientcheck = "true";
+    $patientcond = "block";
+    $patientchecked="checked";
 }
 // Verbindung schließen
 pg_close($dbconn);
@@ -107,8 +98,6 @@ foreach($countryList as $cvalue)
 $birthy = substr($birthday, 0,4);
 $birthm = substr($birthday,5,2);
 $birthd = substr($birthday,8,2);
-
-
 
 ?>
 
@@ -176,34 +165,18 @@ $birthd = substr($birthday,8,2);
                   yearfield.options[y]=new Option(thisyear, thisyear);
               thisyear-=1;
           }
-          <?php echo 'document.getElementById("cb_patient").checked=' . $patientcheck . ';';?>
-      }
-      function addtreatingdoc(newdoctor)
-      {
-          var tdl = document.getElementById('treatingdocs_list');
-          if(tdl.value == "" || tdl.value == null)
-            tdl.value += newdoctor.value;
-          else
-              tdl.value += ";" + newdoctor.value;
-              
-          if(newdoctor.value!='' && newdoctor.value!=null)
-          {
-              var sel = document.getElementById('treatingdocs');
-              sel.options[sel.options.length] = new Option(newdoctor.options[newdoctor.selectedIndex].text,newdoctor.value,false,true);
-          }
+          
       }
       
-      function removeseldoc()
+      function setPatient(inisset)
       {
-          var tdl = document.getElementById('treatingdocs_list');
-          var sel = document.getElementById('treatingdocs');
-          tdl.value = tdl.value.replace(";" + sel.value,'');
-          tdl.value = tdl.value.replace(sel.value + ";",'');
-          tdl.value = tdl.value.replace(sel.value,'');
-          
-          
-          sel.remove(sel.selectedIndex);
+          var pc = document.getElementById('patient_cond');
+          if(inisset)
+              pc.style.display='block';
+          else
+              pc.style.display='none';
       }
+
     </script>
   </head>
     <body onload="populatedropdown('daydropdown', 'monthdropdown', 'yeardropdown');">
@@ -247,19 +220,17 @@ $birthd = substr($birthday,8,2);
 
 
                     <p>
-                      <strong> Is Patient  </strong> <input type="checkbox" id="cb_patient" name="cb_patient" ><br>
-                      Conditiion: <input name="condition" type="text" size="30" maxlength="40" value="<?php echo $condition; ?>"> <br><br>
-                      <div style="width:150px; float: left;">is treated By:</div> <select style="width:200px;" size="5" id="treatingdocs" name="treatingdocs"></select><input type="button" value="remove" onclick="removeseldoc();"><br>
-                      <div style="width:150px; float: left;">add doctor</div><select style="width:200px;" id="treatingdoc" name="treatingdoc" onchange="addtreatingdoc(this);"><?php echo $doctors_opts;?></select>
+                        <strong> Is Patient  </strong> <input type="checkbox" id="cb_patient" <?php echo $patientchecked;?> name="cb_patient" onclick="setPatient(this.checked);this.value=this.checked;" ><br>
+                      <div id="patient_cond" style="display:<?php echo $dispcond; ?>">Conditiion: <input name="condition" type="text" size="30" maxlength="40" value="<?php echo $condition; ?>"> <br><br></div>
+                      
                     </p>  
 
 
                     <hr>
 
-                    <p><input type="submit" value="Senden"></p>s
+                    <p><input type="submit" value="Senden"></p>
 
                     <input type="hidden" id="ssn" name="ssn" value="<?php echo $ssn ?>"/>
-                    <input type="hidden" id="treatingdocs_list" name="treatingdocs_list">
                 </form>
             </div>
         </div>
