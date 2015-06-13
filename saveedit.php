@@ -29,6 +29,9 @@ $postalcode = pg_escape_string($_POST["postalcode"]);
 $nation = pg_escape_string($_POST["nation"]);
 $ispatient = isset($_POST["cb_patient"]);
 $condition = pg_escape_string($_POST["condition"]);
+$isstaff = isset($_POST["cb_staff"]);
+$isdoctor = isset($_POST["rb_doctor"]);
+$isnurse = isset($_POST["rb_nurse"]);
 ?>
 
 <html>
@@ -36,9 +39,10 @@ $condition = pg_escape_string($_POST["condition"]);
         <meta charset="UTF-8">
         <title></title>
     </head>
-    <body onload="//document.location = 'edit.php?ssn=<?php echo $ssn ?>';">
+    <body onload="document.location = 'edit.php?ssn=<?php echo $ssn ?>';">
         <?php
-        $query = 'UPDATE "Person" set';
+        $query = 'BEGIN;';
+        $query .= 'UPDATE "Person" set';
         $query .= " birthday='" . $birthday . "'";
         $query .= ", gender='" . $gender . "'";
         $query .= ", firstname='" . $firstname . "'";
@@ -62,8 +66,54 @@ $condition = pg_escape_string($_POST["condition"]);
                 $query .= "update \"Patient\" set condition = '" . $condition . "' where personssn = '" . $ssn . "';";
             }
         } else {
-            $query .= "delete from \"Patient\" where personssn='" . $ssn . "';";
+            $query .= "delete from \"Doctortreatingpatient\" where patientssn='" . $ssn . "';delete from \"Patient\" where personssn='" . $ssn . "';";
         }
+
+        $result = pg_query("select * from \"Staff\" where personssn = '" . $ssn . "';") or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+        $rows = pg_num_rows($result);
+
+        $tablestaffset = false;
+        if ($rows != "0") {
+            $tablestaffset = true;
+        }
+
+        $result = pg_query("select * from \"Doctor\" where staffssn = '" . $ssn . "';") or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+        $rows = pg_num_rows($result);
+
+        $tabledoctorset = false;
+        if ($rows != "0") {
+            $tabledoctorset = true;
+        }
+
+
+        $result = pg_query("select * from \"Nurse\" where staffssn = '" . $ssn . "';") or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+        $rows = pg_num_rows($result);
+
+        $tablenurseset = false;
+        if ($rows != "0") {
+            $tablenurseset = true;
+        }
+        if ($isstaff) {
+            if (!$tablestaffset) {
+                $query .= "INSERT INTO \"Staff\" (personssn) VALUES ('" . $ssn . "');";
+            }
+            if ($isdoctor) {
+                if (!$tabledoctorset) {
+                    $query .= "INSERT INTO \"Doctor\" (staffssn) VALUES ('" . $ssn . "');";
+                }
+                $query .= "delete from \"Nursepermissionto\" where nursessn = '$ssn';delete from \"Nurse\" where staffssn='" . $ssn . "';";
+            }
+            if ($isnurse) {
+                if (!$tablenurseset) {
+                    $query .= "INSERT INTO \"Nurse\" (staffssn) VALUES ('" . $ssn . "');";
+                }
+                $query .= "delete from \"Doctortreatingpatient\" where doctorssn = '$ssn';delete from \"Doctor\" where staffssn='" . $ssn . "';";
+            }
+        } else {
+            $query .= "delete from \"Doctortreatingpatient\" where doctorssn = '$ssn';delete from \"Doctor\" where staffssn='" . $ssn . "';delete from \"Nursepermissionto\" where nursessn = '$ssn';delete from \"Nurse\" where staffssn='" . $ssn . "';delete from \"Staff\" where personssn='" . $ssn . "';";
+        }
+
+        $query .= "COMMIT;";
 
         $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
         // Verbindung schließen
