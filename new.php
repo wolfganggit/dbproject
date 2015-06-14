@@ -83,10 +83,6 @@ Sendemethode auf Post ändern
      
   	<div id="container">
       <?php
-        $erfolgreichEingefuegt = ""; 
-        echo $erfolgreichEingefuegt;
-
-
 
 
           // Erstellen der Liste für die Länderauswahl
@@ -218,11 +214,11 @@ Sendemethode auf Post ändern
     
     if(isset($_POST["vorname"])){
 
-      $person = isset($_POST["person"]) ? $_POST["person"] : null;
-      $gender = isset($_POST["gender"]) ? $_POST["gender"] : '';
-      $title = $_POST["title"];
-      $vorname = $_POST["vorname"];
-      $nachname = $_POST["nachname"];
+      $person = isset($_POST["person"]) ? pg_escape_string($_POST["person"]) : null;
+      $gender = isset($_POST["gender"]) ? pg_escape_string($_POST["gender"]) : null;
+      $title = pg_escape_string($_POST["title"]);
+      $vorname = pg_escape_string($_POST["vorname"]);
+      $nachname = pg_escape_string($_POST["nachname"]);
 
       $yeardropdown = isset($_POST["yeardropdown"]) ? $_POST["yeardropdown"] : '';    
       $monthdropdown = isset($_POST["monthdropdown"]) ? $_POST["monthdropdown"] : '';    
@@ -232,14 +228,14 @@ Sendemethode auf Post ändern
       if($birthm < 10){$birthm = "0" . $birthm;}
       
       
-      $birthday =  $yeardropdown . "-" . $birthm . "-" . $daydropdown;
+      $birthday =  pg_escape_string($yeardropdown . "-" . $birthm . "-" . $daydropdown);
 
-      $ssn = $_POST["ssn"];
-      $streetname = $_POST["streetname"];
-      $streetnumber = $_POST["streetnumber"];
-      $town = $_POST["town"];
-      $postalcode = $_POST["postalcode"];
-      $nation = $_POST["nation"];
+      $ssn = pg_escape_string($_POST["ssn"]);
+      $streetname = pg_escape_string($_POST["streetname"]);
+      $streetnumber = pg_escape_string($_POST["streetnumber"]);
+      $town = pg_escape_string($_POST["town"]);
+      $postalcode = pg_escape_string($_POST["postalcode"]);
+      $nation = pg_escape_string($_POST["nation"]);
 
       //patient vallues
       $condition = $_POST["condition"];
@@ -339,8 +335,6 @@ Sendemethode auf Post ändern
         unset($$vars[$i]);
       }
       unset($vars,$i);
-
-      $erfolgreichEingefuegt = "Erfolgreich eingefuegt";
 
     }
     
